@@ -16,7 +16,7 @@ export default function App() {
   // --- FUNÇÃO PARA COMPARTILHAR O LINK DO CARDÁPIO ---
   const compartilharLinkCardapio = async () => {
   try {
-    const linkVercel = `https://SEU-PROJETO.vercel.app/${lojaID}`;
+    const linkVercel = `https://pedidofacuilv2-d0r5939f1-raulehrat-2637s-projects.vercel.app/${lojaID}`;
 
     const mensagem = `Olá! Confira nosso cardápio digital e faça seu pedido:\n${linkVercel}`;
 
@@ -34,7 +34,7 @@ const isWeb = width > 768;
   const [telaAtual, setTelaAtual] = useState('LOGIN');
   const [menuAtivo, setMenuAtivo] = useState('menu'); // 'menu', 'categorias', 'cadastro', 'linguagem' 
   const [lojaID, setLojaID] = useState('');
-useEffect(() => {
+  useEffect(() => {
   if (
     typeof window !== 'undefined' &&
     window &&
@@ -216,7 +216,7 @@ useEffect(() => {
     Alert.alert("Sucesso", "Cadastro realizado! Faça login.");
     setTelaAtual('LOGIN');
   };
-const compartilharMeuCardapio = async () => { try { `https://pedidofacilv3.vercel/?id=${lojaID}`; await Share.share({ message: `Confira nosso cardápio digital e faça seu pedido: ${linkVercel}`, }); } catch (error) { Alert.alert("Erro", "Não foi possível compartilhar o link."); } };
+const compartilharMeuCardapio = async () => { try { `https://seu-site-no-vercel.app/?id=${lojaID}`; await Share.share({ message: `Confira nosso cardápio digital e faça seu pedido: ${linkVercel}`, }); } catch (error) { Alert.alert("Erro", "Não foi possível compartilhar o link."); } };
   const realizarLogin = async () => {
     if (!lojaID || !senha) return Alert.alert("Erro", "Preencha o ID e a Senha");
     const res = await fetch(`${BASE_URL}/${lojaID}/config/perfil.json`);
@@ -700,16 +700,16 @@ if (telaAtual === 'CARDAPIO') {
         <TouchableOpacity style={[styles.abaBtn, abaPrincipal === 'FINANCEIRO' && styles.abaAtiva]} onPress={() => setAbaPrincipal('FINANCEIRO')}>
           <Text style={styles.abaTxt}>FINANCEIRO</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.abaBtn, {backgroundColor: '#27ae60'}]} onPress={() => setVerCardapioCliente(true)}>
+        <TouchableOpacity style={[styles.abaBtn, {backgroundColor: '#27ae60', marginLeft:25}]} onPress={() => setVerCardapioCliente(true)}>
           <Text style={styles.abaTxt}>📱 MEU CARDÁPIO</Text>
         </TouchableOpacity>
       </View>
 <TouchableOpacity 
-          style={[styles.abaBtn, {backgroundColor: '#3498db'}]} 
-          onPress={compartilharLinkCardapio}
-        >
-          <Text style={styles.abaTxt}>📤 ENVIAR LINK</Text>
-        </TouchableOpacity>
+  style={styles.btnLink}
+  onPress={compartilharLinkCardapio}
+>
+  <Text style={styles.whiteBold}>📤 ENVIAR LINK</Text>
+</TouchableOpacity>
       {abaPrincipal === 'PDV' ? (
         <ScrollView style={styles.p15}>
           <View style={styles.card}>
@@ -1489,6 +1489,8 @@ const styles = StyleSheet.create({
   link: { marginTop: 20, color: '#27AE60', fontWeight: 'bold', fontSize: 15 },
   header: { flexDirection: 'row', backgroundColor: '#000', padding: 10 },
   abaBtn: { flex: 1, alignItems: 'center', padding: 20,},
+  btnLink: {
+  alignSelf: 'center',  backgroundColor: '#3498db',  paddingVertical: 10,  paddingHorizontal: 20,  borderRadius: 8,  marginVertical: 8},
   abaAtiva: { borderBottomWidth: 4, borderBottomColor: '#27AE60' },
   abaTxt: { color: '#FFF', fontWeight: 'bold',},
   p15: { padding: 15 },
