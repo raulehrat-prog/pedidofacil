@@ -23,6 +23,7 @@ export default function CardapioCliente({ lojaID, whatsappLoja }) {
 
   useEffect(() => {
     const carregarCardapio = async () => {
+      console.log("ID DA LOJA:", lojaID);
       try {
         const res = await fetch(`${BASE_URL}/${lojaID}/config/cardapio.json`);
         const data = await res.json();
@@ -61,6 +62,9 @@ const removerItem = (index) => {
   };
 
   const finalizarPedido = () => {
+    if (sacola.length === 0) {
+  return Alert.alert("Sacola vazia", "Adicione itens antes de finalizar.");
+}
     if (!nomeCliente || !endereco) {
       return Alert.alert("Ops!", "Por favor, preencha seu nome e endereço para entrega.");
     }
@@ -91,7 +95,7 @@ _Pedido enviado via Cardápio Digital_`;
     pagamento,
     itens: sacola,
     total: calcularTotalGeral(),
-    data: new Date().toISOString(),
+    data: Date.now(),
     status: "novo"
   })
 });
@@ -182,7 +186,7 @@ setEndereco(''); };
 
     {sacola.map((item, index) => (
       <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
-        <Text>{item.quantidade}x {item.nome}</Text>
+        <Text>{item.quantidade}x {item.nome} {item.tamanho ? `(${item.tamanho})` : ''}</Text>
         <TouchableOpacity onPress={() => removerItem(index)}>
           <Text style={{ color: 'red' }}>Remover</Text>
         </TouchableOpacity>
@@ -242,7 +246,7 @@ setEndereco(''); };
       {/* BOTÃO FINALIZAR */}
       {sacola.length > 0 && (
         <TouchableOpacity style={styles.btnZap} onPress={finalizarPedido}>
-          <Text style={styles.txtBranco}>ENVIAR PEDIDO (R$ {calcularTotalGeral()})</Text>
+          <Text style={styles.txtBranco}>ENVIAR PEDIDO • {sacola.length} ITENS • R$ {calcularTotalGeral()}</Text>
         </TouchableOpacity>
       )}
     </KeyboardAvoidingView>

@@ -2,21 +2,24 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { 
   StyleSheet, Text, View, TextInput, TouchableOpacity, 
   ScrollView, Alert, StatusBar, SafeAreaView, Modal, Share, Linking, Clipboard,
-  Image
+  Image, Platform
 } from 'react-native';
+
 import CardapioCliente from './CardapioCliente';
 // Importamos o AsyncStorage para salvar o login no celular
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useWindowDimensions } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-const BASE_URL = "https://marmitas-47af0-default-rtdb.firebaseio.com/";
+const BASE_URL = "https://marmitas-47af0-default-rtdb.firebaseio.com";
+
 
 export default function App() {
+  
   const { width } = useWindowDimensions();
   // --- FUNÇÃO PARA COMPARTILHAR O LINK DO CARDÁPIO ---
   const compartilharLinkCardapio = async () => {
   try {
-    const linkVercel = `https://pedidofacuilv2-d0r5939f1-raulehrat-2637s-projects.vercel.app/${lojaID}`;
+    const linkVercel = `https://pedidofacilv5-b5vlk4sct-raulehrat-2637s-projects.vercel.app/${lojaID}`;
 
     const mensagem = `Olá! Confira nosso cardápio digital e faça seu pedido:\n${linkVercel}`;
 
@@ -30,23 +33,23 @@ export default function App() {
 };
 const isWeb = width > 768;
   // --- ESTADOS DE ACESSO E PERFIL ---
+  
+
   const [estaLogado, setEstaLogado] = useState(false);
   const [telaAtual, setTelaAtual] = useState('LOGIN');
   const [menuAtivo, setMenuAtivo] = useState('menu'); // 'menu', 'categorias', 'cadastro', 'linguagem' 
   const [lojaID, setLojaID] = useState('');
+  console.log("LOJA ID:", lojaID);
   useEffect(() => {
-  if (
-    typeof window !== 'undefined' &&
-    window &&
-    window.location &&
-    window.location.pathname
-  ) {
-    const path = window.location.pathname.replace('/', '');
+  if (Platform.OS === "web" && typeof window !== "undefined") {
 
-    if (path && path.length > 0) {
+    const path = window.location.pathname.replace("/", "");
+
+    if (path) {
       setLojaID(path);
-      setTelaAtual('CARDAPIO');
+      setTelaAtual("CARDAPIO");
     }
+
   }
 }, []);
   const [nomeRestaurante, setNomeRestaurante] = useState('');
@@ -116,6 +119,14 @@ const [busca, setBusca] = useState('');
   const [precoM, setPrecoM] = useState('');
   const [precoG, setPrecoG] = useState('');
   const [tamanhoSel, setTamanhoSel] = useState('');
+  if (telaAtual === "CARDAPIO") {
+  return (
+    <CardapioCliente
+      lojaID={lojaID}
+      whatsappLoja={whatsappLoja}
+    />
+  );
+}
   // --- CONFIGURAÇÃO DE IDIOMA ---
   const [idioma, setIdioma] = useState('PT'); // PT ou EN
   const textos = {
@@ -678,6 +689,7 @@ const copiarEndereco = (endereco) => {
       .filter(p => p.status === 'Pago' || p.status === 'Concluído')
       .reduce((acc, curr) => acc + (curr.total || 0), 0);
   };
+  
 if (telaAtual === 'CARDAPIO') {
   return (
     <CardapioCliente 
